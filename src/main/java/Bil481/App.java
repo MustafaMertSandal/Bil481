@@ -7,6 +7,8 @@ import static spark.Spark.get;
 import static spark.Spark.port;
 import static spark.Spark.post;
 
+import org.apache.logging.log4j.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -50,7 +52,7 @@ public class App {
     return "Hello world.";
 }
 
-public static void main(String[] args) {
+public static void main(String[] argos) {
     port(getHerokuAssignedPort());
 
     get("/", (req, res) -> "Hello, World");
@@ -103,6 +105,11 @@ public static void main(String[] args) {
           return new ModelAndView(map, "compute.mustache");
         },
         new MustacheTemplateEngine());
+
+    org.apache.logging.log4j.Logger logger = LogManager.getLogger(App.class);
+    int port = Integer.parseInt(System.getenv("PORT"));
+    port(getHerokuAssignedPort());
+    logger.error("Current port number:" + port);
 }
 
     static int getHerokuAssignedPort() {
@@ -112,5 +119,6 @@ public static void main(String[] args) {
         }
         return 4567; //return default port if heroku-port isn't set (i.e. on localhost)
     }
+
 
 }
